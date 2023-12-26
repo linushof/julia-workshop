@@ -119,3 +119,64 @@ end
 
 squared_error_regression(200, 100, x,y)
 squared_error_regression(1000, 300, x,y)
+
+
+
+# Theory
+
+## create a hierachy of pokemon
+abstract type Pokemon end
+abstract type Normal <: Pokemon end # Normal as a subtype of Pokemon
+abstract type Flying <: Pokemon end
+abstract type Electric <: Pokemon end
+
+# create Pikachu
+struct Pikachu <: Electric
+    nickname
+    attack
+    defense
+    speed
+    hp
+end
+my_pikachu = Pikachu("Pika", 135, 80, 110, 132)
+my_pikachu  
+my_pikachu.attack
+
+# new Flying pokemon
+struct Laui <: Flying
+    nickname
+    attack
+    defense
+    speed
+    hp
+end
+
+my_laui = Laui("Laui", 100, 100, 90, 150)
+my_laui.nickname
+
+# constructors: functions that create new objects
+
+## outer constructors: add default values for convenience
+
+import Random: randstring
+Pikachu(attack, defense, speed, hp) = Pikachu(randstring(10), attack, defense, speed, hp)
+weird_pikachu = Pikachu(132, 34, 23, -12)
+
+## inner constructors: define permissible values
+
+struct Pichu <: Electric
+    nickname
+    attack
+    defense
+    speed
+    hp
+    function Pichu(nickname, attack, defense, speed, hp)
+        if (attack < 0) | (defense < 0) | (speed < 0) | (hp < 0)
+            error("Your Pokemon's stats are outside the valide range")
+        else
+            return new(nickname, attack, defense, speed, hp)
+        end
+    end
+end
+
+weird_pichu = Pichu("Pika_2.0", 132, 34, 23, -12)
