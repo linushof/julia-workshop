@@ -1,11 +1,5 @@
-#region Chapter1
-
 println("Hello, Julia!") #printing outputs
 1+1 # adding numbers
-
-#endregion
-
-#region Chapter2
 
 # Variable assignment
 
@@ -87,4 +81,41 @@ base_vector.^2
 
 # Exercise
 
-#endregion
+function regression(α, β, X)
+     y = α .+ β*X
+    return y
+end
+
+base_vector
+
+regression(1,2,base_vector)
+
+
+using Random
+Random.seed!(1234)
+
+x = 10 .+ 3*randn(20)
+
+y = regression(1000, 300, x)
+
+
+y+=500*randn(20)
+y
+
+
+function error(obs, pred)
+    return sum((obs - pred).^2)
+end
+
+first_vector = [1,2,3]
+second_vector = [4,5,6]
+
+error(first_vector, second_vector)
+
+function squared_error_regression(α, β, x, y)
+    ŷ = regression(α,β,x)
+    return error(y,ŷ)
+end
+
+squared_error_regression(200, 100, x,y)
+squared_error_regression(1000, 300, x,y)
