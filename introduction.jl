@@ -180,3 +180,73 @@ struct Pichu <: Electric
 end
 
 weird_pichu = Pichu("Pika_2.0", 132, 34, 23, -12)
+
+
+# Exercise
+
+subtypes(AbstractFloat)
+
+
+
+abstract type Measurment <: AbstractFloat end
+subtypes(AbstractFloat)
+
+struct  Measurement <: AbstractFloat
+    value
+    error
+    function Measurement(value, error)
+        new(value, abs(error))
+    end
+end
+subtypes(AbstractFloat)
+
+±(value, error) = Measurement(value, error)
+
+m1 = 2.98 ± .43
+m2 = .34 ± 1.34 
+
+1 ± 1
+
+±
+
+
+# Multiple dispatch
+
+a = rand(5, 5)
+
+methods(*)
+
+
+a = 1
+b = 1
+
+@which a*b
+
+@which a*b
+
+a*b
+
+
+effectiveness(attacker::Pokemon, defender::Pokemon) = 1
+
+my_laui
+my_pikachu
+
+effectiveness(my_laui, my_pikachu)
+
+effectiveness(attacker::Electric, defender::Electric) = .5
+effectiveness(attacker::Flying, defender::Electric) = .5
+effectiveness(attacker::Normal, defender::Electric) = 1
+effectiveness(attacker::Electric, defender::Flying) = 2
+effectiveness(attacker::Flying, defender::Flying) = 1
+effectiveness(attacker::Normal, defender::Flying) = 1
+effectiveness(attacker::Electric, defender::Normal) = 1
+effectiveness(attacker::Flying, defender::Normal) = 1
+effectiveness(attacker::Normal, defender::Normal) = 1
+methods(effectiveness)
+
+supertype(Pikachu)
+supertype(Laui)
+
+effectiveness(my_pikachu, my_laui)
+
