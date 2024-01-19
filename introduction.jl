@@ -188,7 +188,6 @@ subtypes(AbstractFloat)
 
 
 
-abstract type Measurment <: AbstractFloat end
 subtypes(AbstractFloat)
 
 struct  Measurement <: AbstractFloat
@@ -207,8 +206,6 @@ m2 = .34 ± 1.34
 
 1 ± 1
 
-±
-
 
 # Multiple dispatch
 
@@ -222,27 +219,13 @@ b = 1
 
 @which a*b
 
-@which a*b
-
-a*b
-
 
 effectiveness(attacker::Pokemon, defender::Pokemon) = 1
-
-my_laui
-my_pikachu
-
 effectiveness(my_laui, my_pikachu)
 
 effectiveness(attacker::Electric, defender::Electric) = .5
 effectiveness(attacker::Flying, defender::Electric) = .5
-effectiveness(attacker::Normal, defender::Electric) = 1
 effectiveness(attacker::Electric, defender::Flying) = 2
-effectiveness(attacker::Flying, defender::Flying) = 1
-effectiveness(attacker::Normal, defender::Flying) = 1
-effectiveness(attacker::Electric, defender::Normal) = 1
-effectiveness(attacker::Flying, defender::Normal) = 1
-effectiveness(attacker::Normal, defender::Normal) = 1
 methods(effectiveness)
 
 supertype(Pikachu)
@@ -250,3 +233,63 @@ supertype(Laui)
 
 effectiveness(my_pikachu, my_laui)
 
+# Exercise 
+import Base: +
+
+function +(a::Measurement, b::Measurement)
+    Measurement(a.value + b.value, a.error + b.error)
+end
+
+
+m1 + m2
+
+import Base: -
+-(x::Measurement, y::Measurement) = Measurement(x.value - y.value, x.error + y.error)
+
+import Base: show
+
+function show(io::IO, m::Measurement)
+    value_as_string = string(round(m.value, digits = 2))
+    error_as_string = string(round(m.error, digits = 2))
+    print(io, value_as_string*" ± "*error_as_string)
+end
+
+m1
+
+import Base: +
++(x::Real, y::Measurement) = Measurement(x + y.value, y.error)
++(x::Measurement, y::Real) = y + x 
+m1 + 3.53
+3.53 + m1
+
+-(x::Measurement, y::Real) = Measurement(x.value - y, x.error)
+-(x::Real, y::Measurement) = Measurement(x - y.value, y.error)
+
+import Base: *
+*(x::Measurement, y::Real) = Measurement(x.value*y, abs(x.error*y))
+*(x::Real, y::Measurement) = y*x
+
+m1
+m2
+m1 + m2
+9.34 + m1
+m2 + 4.52
+m2 * 3.5
+
+
+using Random
+Random.seed!(1243)
+
+x = 10 .+ 3*randn(20)
+β = 300
+α = 1000
+y = α .+ β*x + 500*randn(20)
+
+x = Measurement.(x, 2*rand(20))
+
+function predict(x, α, β)
+    y = α .+ β*x
+    return y
+end
+
+predict(x, 1000, 300)
